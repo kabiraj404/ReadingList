@@ -1,5 +1,15 @@
 [
   {
+    "title": "Things I've done with AI",
+    "url": "https://sjer.red/blog/2026/built-with-ai/",
+    "description": "My thoughts on AI, and what it has helped me achieve",
+    "site": "Jerred Shepherd",
+    "author": "",
+    "image": "https://sjer.red/blog/2026/built-with-ai/index.png",
+    "tag": "**** this is cool, i should do something more :)",
+    "date": "2026-03-09"
+  },
+  {
     "title": "Hardening Firefox with Anthropic’s Red Team ",
     "url": "https://blog.mozilla.org/en/firefox/hardening-firefox-anthropic-red-team/",
     "description": "For more than two decades, Firefox has been one of the most scrutinized and security-hardened codebases on the web. Open source means our code is visible,",
