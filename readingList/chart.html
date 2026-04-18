@@ -1,69 +1,222 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reading List Activity</title>
+    <title>ReadingList Activity</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 12px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: left;
+        margin: 0 0 8px 0;
+      }
+      h4 {
+        margin: 6px 0;
+      }
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 10px;
+      }
+      @media (max-width: 1200px) {
+        .charts-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      canvas {
+        max-height: 400px;
+        margin: 0;
+      }
+      .divider {
+        margin: 8px 0;
+      }
+      .tag-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+      }
+      @media (max-width: 1200px) {
+        .tag-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .tag-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .tag-column h3 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+      }
+      .articles-list {
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .articles-list a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      .articles-list a:hover {
+        text-decoration: underline;
+      }
+    </style>
 </head>
 <body>
 
-<canvas id="readsChart" width="600" height="400"></canvas>
+<div class="container">
+
+  <h1> Summary of my reading list </h1>
+  <hr class="divider">
+  <h4>Top ten sites: </h4>
+    <canvas id="sitesChart"></canvas>
+  <hr class="divider">
+  
+  <h4> Number of Articles per Month: </h4>
+    <canvas id="monthlyChart"></canvas>
+
+  <hr class="divider">
+
+  <h4>Articles by Tag</h4>
+  <div class="tag-grid" id="tagsContainer"></div>
+</div>
 
 <script>
-  // Fetch the JSON data of reading list
-  fetch('https://raw.githubusercontent.com/kabiraj404/kabiraj404.github.io/main/ReadingCatalog/readingList/list.json')
+  fetch('./list.json')
     .then(res => {
       if (!res.ok) throw new Error('Network response was not ok');
       return res.json();
     })
     .then(data => {
-      // Prepare counts of reads grouped by month (YYYY-MM)
-      const counts = {};
+         // Chart 1: Top 10 Sites
+      const siteCounts = {};
       data.forEach(item => {
-        if (item.date && item.date.length >= 7) {
-          let month = item.date.slice(0, 7); // Extract YYYY-MM
-          counts[month] = (counts[month] || 0) + 1;
+        if (item.site) {
+          siteCounts[item.site] = (siteCounts[item.site] || 0) + 1;
         }
       });
 
-      const labels = Object.keys(counts);
-      const values = Object.values(counts);
+      const sortedSites = Object.entries(siteCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
 
-      // Log labels and values for debugging
-      console.log("Months:", labels);
-      console.log("Counts:", values);
+      const siteLabels = sortedSites.map(entry => entry[0]);
+      const siteValues = sortedSites.map(entry => entry[1]);
 
-      // Create the bar chart
-      new Chart(document.getElementById('readsChart'), {
+      new Chart(document.getElementById('sitesChart'), {
         type: 'bar',
         data: {
-          labels: labels,
+          labels: siteLabels,
           datasets: [{
-            label: 'Reads per Month',
-            data: values,
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
+            label: 'Articles',
+            data: siteValues,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)'
           }]
         },
         options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
+          indexAxis: 'y',
           responsive: true,
           plugins: {
-            legend: {
-              display: true,
-              position: 'top'
-            },
-            title: {
-              display: true,
-              text: 'Monthly Reading Activity'
-            }
+            legend: { display: false },
+            title: { display: true }
           }
         }
       });
+
+      // Chart 2: Monthly Activity
+      const monthCounts = {};
+      data.forEach(item => {
+        if (item.date && item.date.length >= 7) {
+          let month = item.date.slice(0, 7);
+          monthCounts[month] = (monthCounts[month] || 0) + 1;
+        }
+      });
+
+      const monthLabels = Object.keys(monthCounts).sort();
+      const monthValues = monthLabels.map(month => monthCounts[month]);
+
+      new Chart(document.getElementById('monthlyChart'), {
+        type: 'line',
+        data: {
+          labels: monthLabels,
+          datasets: [{
+            label: 'Articles per Month',
+            data: monthValues,
+            borderColor: 'rgba(75, 192, 75, 1)',
+            backgroundColor: 'rgba(75, 192, 75, 0.1)',
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true}
+          }
+        }
+      });
+
+      // Articles by Tag
+      const tagGroups = {};
+      data.forEach(item => {
+        if (item.tag) {
+          const starMatch = item.tag.match(/^\*+/);
+          const stars = starMatch ? starMatch[0].length : 0;
+          if (stars > 0 && stars <= 5) {
+            if (!tagGroups[stars]) {
+              tagGroups[stars] = [];
+            }
+            tagGroups[stars].push(item);
+          }
+        }
+      });
+
+      for (let stars in tagGroups) {
+        tagGroups[stars].sort((a, b) => new Date(b.date) - new Date(a.date));
+        tagGroups[stars] = tagGroups[stars].slice(0, 5);
+      }
+
+      const tagsContainer = document.getElementById('tagsContainer');
+      for (let stars = 1; stars <= 5; stars++) {
+        const articles = tagGroups[stars] || [];
+        const starLabel = '*'.repeat(stars);
+        
+        const tagColumn = document.createElement('div');
+        tagColumn.className = 'tag-column';
+        
+        const tagTitle = document.createElement('h3');
+        tagTitle.textContent = starLabel;
+        tagColumn.appendChild(tagTitle);
+
+        const articlesList = document.createElement('div');
+        articlesList.className = 'articles-list';
+        
+        const titleLinks = articles.map(article => {
+          const link = document.createElement('a');
+          link.href = article.url;
+          link.target = '_blank';
+          link.textContent = article.title;
+          return link;
+        });
+
+        titleLinks.forEach((link, index) => {
+          articlesList.appendChild(link);
+          if (index < titleLinks.length - 1) {
+            const separator = document.createTextNode(' || ');
+            articlesList.appendChild(separator);
+          }
+        });
+
+        tagColumn.appendChild(articlesList);
+        tagsContainer.appendChild(tagColumn);
+      }
     })
     .catch(error => {
       console.error('Error loading or parsing data:', error);

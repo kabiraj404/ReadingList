@@ -138,7 +138,8 @@
 <body>
   <h1>Reading List</h1>
   <p class="subtitle">List of articles I have read on the internet <br>
-    * represents how I felt (* not happy, ***** super happy), followed by my two cents' worth
+    * represents how I felt (* not happy, ***** super happy), followed by my two cents' worth <br>
+    This list is unsupervised, let's not overanalyze the <a href="/ReadingList/readingList/chart.html" target="_blank"> summary. </a> 
   </p>
 
   <div id="reading-list" class="loading">Loading... </div>
@@ -151,7 +152,7 @@
   <script>
     async function fetchReadingList(retries = 3) {
       const container = document.getElementById('reading-list');
-      const url = 'readingList/list.json? t=' + new Date().getTime();
+      const url = '/ReadingList/readingList/list.json? t=' + new Date().getTime();
       
       for (let i = 0; i < retries; i++) {
         try {
