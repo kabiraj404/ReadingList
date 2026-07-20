@@ -1,5 +1,15 @@
 [
   {
+    "title": "Hacker wipes Romania's entire land registry database",
+    "url": "https://news.risky.biz/risky-bulletin-hacker-wipes-romanias-entire-land-registry-database/",
+    "description": "In other news: Graykey maker sues former employee for leaking exploit; Hugging Face was hacked using AI; unauth RCE finally found in WordPress.",
+    "site": "Risky.Biz",
+    "author": "",
+    "image": "https://storage.ghost.io/c/16/e9/16e9a748-ca66-4b3c-8590-85537131f696/content/images/2026/07/000-RBN-logo-4.png",
+    "tag": "* {technology} this is quite an attempt",
+    "date": "2026-07-20"
+  },
+  {
     "title": "Removing Jeff Bezos From My Bed ◆ Truffle Security Co.",
     "url": "https://trufflesecurity.com/blog/removing-jeff-bezos-from-my-bed",
     "description": "Eight Sleep smart bed found to contain an exposed AWS key and a likely backdoor that allowed engineers to remotely access users' beds",
