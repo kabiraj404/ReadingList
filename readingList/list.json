@@ -1,5 +1,15 @@
 [
   {
+    "title": "From Linux to Wikipedia: How Volunteers Build the Internet | The MIT Press Reader",
+    "url": "https://thereader.mitpress.mit.edu/from-linux-to-wikipedia-how-volunteers-build-the-internet/",
+    "description": "Peer production is responsible for some of the most valuable online resources, challenging the authority of firms, markets, and government bureaucracies.",
+    "site": "The MIT Press Reader",
+    "author": "The MIT Press Reader",
+    "image": "https://thereader.mitpress.mit.edu/wp-content/uploads/2026/09/internet-commons-internet.jpg",
+    "tag": "**** {internet culture} it is all about passion and if there is money people tend to run after money, here is the discussion about this articlee https://news.ycombinator.com/item?id=50388122 ",
+    "date": "2026-11-06"
+  },
+  {
     "title": "The first 1000 days: Modeling language learning from individual children’s everyday speech | Science",
     "url": "https://www.science.org/doi/full/10.1126/science.aeh9311?af=R#editor-abstract",
     "description": "Children learn to understand and speak from the speech around them, yet how that everyday input shapes learning remains unresolved. Large language models show that language is learnable from data, but their scale and training conditions differ sharply ...",
